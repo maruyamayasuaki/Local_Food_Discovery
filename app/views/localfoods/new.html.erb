@@ -1,0 +1,210 @@
+<%= stylesheet_link_tag 'new', :media => "all" %>
+
+<div class="post-container">
+    <p class="title">投稿フォーム</p>
+    <%= form_for(@localfood, :url => { controller:'localfoods', action:'create'},html: { autocomplete: "off" })do |f| %>
+    <%= f.label :投稿内容 %>
+        <br>
+        <%= f.label :shop, "店名" %>
+        <%= f.text_field :shop, id: "shop", size: 40 %>
+        <br>
+        <br>
+        <%= f.label :place, "場所" %>
+        <%= f.text_field :place, id: 'place', size: 40 %>
+        <br>
+        <!--緯度-->
+        <%= f.hidden_field :lat, id: :lat %>  
+        <!--経度-->
+        <%= f.hidden_field :lng, id: :lng %>
+        <!-- Google Place ID -->
+        <%= f.hidden_field :google_place_id, id: :google_place_id %>
+        <br>
+        <br>
+        <%= f.label :image, "画像" %>
+        <%= f.file_field :image, accept: "image/*" ,size: 40 %>
+        <br>
+        <br>
+        <br>
+         <!-- 朝昼夜の選択 -->
+        <h5>食事の時間帯</h5>
+        <%= f.check_box :meal_times, { multiple: true }, '朝', nil %> 朝
+        <%= f.check_box :meal_times, { multiple: true }, '昼', nil %> 昼
+        <%= f.check_box :meal_times, { multiple: true }, '夜', nil %> 夜
+        <br>
+
+        <!-- 価格帯の選択 -->
+        <h5>価格帯</h5>
+        <%= f.radio_button :price_range, '1000円以下', id: 'price1' %>
+        <label for="price1">1000円以下</label>
+        <br>
+        <%= f.radio_button :price_range, '1000円から3000円', id: 'price2' %>
+        <label for="price2">1000円から3000円</label>
+        <br>
+        <%= f.radio_button :price_range, '3000円から5000円', id: 'price3' %>
+        <label for="price3">3000円から5000円</label>
+        <br>
+        <%= f.radio_button :price_range, '5000円以上', id: 'price4' %>
+        <label for="price4">5000円以上</label>
+        <br>
+        <h5>総合評価</h5>
+        <div class="post_form">
+            <%= f.radio_button :overall, 5 ,id: 'star1'%>
+            <label for="star1"><span class="text">No.1</span>★</label>
+
+            <%= f.radio_button :overall, 4 ,id: 'star2'%>
+            <label for="star2"><span class="text">最高</span>★</label>
+
+            <%= f.radio_button :overall, 3 ,id: 'star3'%>
+            <label for="star3"><span class="text">良い</span>★</label>
+
+            <%= f.radio_button :overall, 2 ,id: 'star4'%>
+            <label for="star4"><span class="text">普通</span>★</label>
+
+            <%= f.radio_button :overall, 1 ,id: 'star5'%>
+            <label for="star5"><span class="text">微妙</span>★</label>
+        </div>
+        <%= f.label :price, "コメント" %>
+        <%= f.text_field :price, class: "comment-text-field" %>
+        <br>
+        <p><%= f.submit "投稿する"%></p>
+        <br>
+    <% end %>
+
+<style>
+/* 投稿フォームのスタイル */
+.comment-text-field {
+    width: 200px; /* 横幅を適切なピクセル値に変更してください */
+    height: 300px; /* 縦幅を適切なピクセル値に変更してください */
+}
+</style>
+
+<h2>Map</h2>
+
+
+<p>マーカーをドラック＆ドロップで位置の調整ができます。<p>
+
+
+<div id='map'></div>
+
+<style>
+#map {
+  height: 500px;
+  width: 100%;
+}
+</style>
+
+<script>
+
+// 初期マップの設定
+let map;
+let marker;
+let autocomplete;
+
+function initMap() {
+    geocoder = new google.maps.Geocoder();
+
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: 35.6803997, lng: 139.7690174 }, // 東京
+        zoom: 15,
+    });
+
+    const input = document.getElementById("shop"); // 店名フィールドに変更
+    autocomplete = new google.maps.places.Autocomplete(input, {
+        types: ['establishment'] // ここで店舗名だけを返すように設定
+    });
+    autocomplete.bindTo("bounds", map);
+    autocomplete.setFields(['name', 'formatted_address', 'address_components', 'geometry', 'place_id']); // 追加: 住所の詳細情報を取得
+
+    // 住所が選択された時のイベントリスナー
+    autocomplete.addListener('place_changed', function () {
+        let place = autocomplete.getPlace();
+        if (!place.geometry) {
+            console.log("選択された場所のジオメトリ情報がありません。");
+            return;
+        }
+        // セットされた住所をフォームに入力
+        document.getElementById('shop').value = place.name; // 修正: 店名フィールドの値を取得
+        document.getElementById('place').value = getAddress(place); // 場所を都道府県と市町村まで取得
+        document.getElementById('lat').value = place.geometry.location.lat();
+        document.getElementById('lng').value = place.geometry.location.lng();
+        document.getElementById('google_place_id').value = place.place_id; // Google Place ID を取得して設定
+
+        // マップ上にピンを表示
+        if (marker) {
+            marker.setMap(null);
+        }
+        marker = new google.maps.Marker({
+            map: map,
+            position: place.geometry.location
+        });
+        map.setCenter(place.geometry.location);
+    });
+}
+
+// 場所を都道府県と市町村まで取得する関数
+function getAddress(place) {
+    let address = '';
+    for (let i = 0; i < place.address_components.length; i++) {
+        let addressType = place.address_components[i].types[0];
+        if (addressType === 'administrative_area_level_1' || addressType === 'locality') {
+            address += place.address_components[i].long_name + ' ';
+        }
+    }
+    return address;
+}
+
+
+//検索後のマップ作成
+let geocoder
+let aft
+function codeAddress(){
+  let inputAddress = document.getElementById('address').value;
+  geocoder.geocode( { 'address': inputAddress}, function(results, status) {
+    if (status == 'OK') {
+        //マーカーが複数できないようにする
+        if (aft == true){
+            marker.setMap(null);
+        }
+
+        //新しくマーカーを作成する
+        map.setCenter(results[0].geometry.location);
+            marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location,
+            draggable: true	// ドラッグ可能にする
+        });
+
+        //二度目以降か判断
+        aft = true
+
+        //検索した時に緯度経度を入力する
+        document.getElementById('lat').value = results[0].geometry.location.lat();
+        document.getElementById('lng').value = results[0].geometry.location.lng();
+
+        // マーカーのドロップ（ドラッグ終了）時のイベント
+        google.maps.event.addListener( marker, 'dragend', function(ev){
+            // イベントの引数evの、プロパティ.latLngが緯度経度
+            document.getElementById('lat').value = ev.latLng.lat();
+            document.getElementById('lng').value = ev.latLng.lng();
+        });
+
+        // 都道府県名と市町村名を取得して場所のフォームに自動入力する
+        let place = results[0].address_components.filter(function(component){
+            return component.types.includes("administrative_area_level_1") || component.types.includes("locality");
+        }).map(function(component){
+            return component.long_name;
+        }).join(" ");
+        document.getElementById('place').value = place;
+
+
+    } else {
+      alert('該当する結果がありませんでした：' + status);
+    }
+  });   
+}
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAP_API_KEY'] %>&callback=initMap&libraries=places&v=weekly" async defer></script>
+
+
+</div>

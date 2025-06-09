@@ -1,0 +1,17 @@
+<div class="japan_map">
+    <%= image_tag 'japan_map.png', alt: '日本地図',size: '900x700' %>
+    <button class="area_btn area1" data-area="hokkaido">北海道</button>
+    <button class="area_btn area2" data-area="tohoku">東北</button>
+    <button class="area_btn area3" data-area="kanto">関東</button>
+    <button class="area_btn area4" data-area="hokuriku">北陸</button>
+    <button class="area_btn area5" data-area="tokai">東海</button>
+    <button class="area_btn area6" data-area="kinki">近畿</button>
+    <button class="area_btn area7" data-area="chugoku">中国</button>
+    <button class="area_btn area8" data-area="shikoku">四国</button>
+    <button class="area_btn area9" data-area="kyushu">九州・沖縄</button>
+
+    <div class="area_overlay"></div>
+
+    <%= render 'localfoods/partials/index/pref_lists' %>
+
+</div>

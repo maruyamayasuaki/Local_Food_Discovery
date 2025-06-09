@@ -1,0 +1,26 @@
+<div class="tabs">
+  <input id="time" type="radio" name="tab_item" checked>
+  <label class="tab_item" for="time">新着順</label>
+  <input id="likes" type="radio" name="tab_item">
+  <label class="tab_item" for="likes">いいねランキング</label>
+
+  <div class="tab_content" id="time_content">
+    <div class="tab_content_description">
+      <p class="c-txtsp">
+  <!-- 新着順の投稿表示 -->
+  <%= render 'localfoods/partials/index/localfoods_list', localfoods: @localfoods %>
+      </p>
+    </div>
+  </div>
+
+  <div class="tab_content" id="likesrank_content">
+    <div class="tab_content_description">
+      <p class="c-txtsp">
+  <!-- いいねランキングの投稿表示 -->
+  <%= render 'localfoods/partials/index/rank_localfoods_list', rank_localfoods: @rank_localfoods %>
+      </p>
+    </div>  
+  </div>
+
+</div>
+

@@ -1,0 +1,69 @@
+<h3>投稿詳細</h3>
+<div class="localfood">
+  <p><%= @localfood.shop %></p>
+  <p><%= @localfood.place %></p>
+  <p><% if @localfood.image.attached? %>
+    <%= image_tag @localfood.image %>
+  <% end %></p>
+  <p><%= @localfood.price %></p>
+  <p><%= @localfood.created_at %></p>
+  <h3>総合評価：
+                <span class="star-rating">
+                  <span class="star-rating-front" style="width: <%= getPercent(@localfood.overall) %>%;">★★★★★</span>
+                  <span class="star-rating-back">★★★★★</span>
+                </span> 
+                </h3>
+
+  <div id='map'></div>
+
+    <style>
+    #map {
+      height: 400px;
+      width: 80%;
+    }
+    </style>
+
+    <!-- js部分 -->
+    <script>
+    //初期マップの設定
+    let map
+    let marker
+    function initMap(){
+      geocoder = new google.maps.Geocoder()
+
+      map = new google.maps.Map(document.getElementById('map'), {
+        center:  {lat: <%= @localfood.lat %>, lng: <%= @localfood.lng %>},
+        zoom: 15,
+      });
+
+      marker = new google.maps.Marker({
+        position:  {lat: <%= @localfood.lat %>, lng: <%= @localfood.lng %>},
+        map: map
+      });
+    }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAP_API_KEY'] %>&callback=initMap" async defer></script>
+
+
+  <% if user_signed_in? %>
+      <% if current_user.already_liked?(@localfood) %>
+        <%= button_to localfood_like_path(@localfood), method: :delete do %>
+        <i class="fas fa-heart fa-3x" aria-hidden="true" style="color: red;"></i>
+          <%= @localfood.likes.count %>いいね
+        <% end %>
+      <% else %>
+        <%= button_to localfood_likes_path(@localfood), method: :post do %>
+        <i class="fas fa-heart fa-3x" aria-hidden="true"></i>
+          <%= @localfood.likes.count %>いいね
+        <% end %>
+      <% end %>
+    <% else %>
+      <p>いいねの数 = </p><%= @localfood.likes.count %>
+    <% end %>
+  <% if user_signed_in? && current_user.id == @localfood.user_id %>
+  <%= link_to "編集", edit_localfood_path(@localfood.id) %>
+  <%= button_to "削除", localfood_path(@localfood.id), method: :delete, class: 'delete-button' %>
+  <% end %>
+</div>
+
+<%= link_to "投稿一覧に戻る", localfoods_path %>

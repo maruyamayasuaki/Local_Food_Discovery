@@ -1,0 +1,77 @@
+<h2>新規登録</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= render "users/shared/error_messages", resource: resource %>
+
+  <div class="field">                             
+    <%= f.label :name %><br />
+    <%= f.text_field :name, autofocus: true, size: 10 %>
+  </div>
+
+  <div class="field">                             
+    <%= f.label :prefecture_id %><br />
+    <%= f.collection_select :prefecture_id, Prefecture.all, :id, :name, prompt: "Select Prefecture" %>
+  </div>
+
+  <div class="field">                             
+    <%= f.label :city_id %><br />
+    <%= f.collection_select :city_id, City.all, :id, :name, prompt: "Select City" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %>
+    <% if @minimum_password_length %>
+    <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br />
+    <%= f.password_field :password, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Sign up" %>
+  </div>
+<% end %>
+
+<%= render "users/shared/links" %>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const prefectureSelect = document.getElementById('user_prefecture_id');
+    const citySelect = document.getElementById('user_city_id');
+
+    prefectureSelect.addEventListener('change', function() {
+      const prefectureId = this.value;
+
+      fetch(`/cities?prefecture_id=${prefectureId}`)
+        .then(response => response.json())
+        .then(data => {
+          // Clear previous options
+          citySelect.innerHTML = '';
+
+          // Add prompt option
+          const promptOption = document.createElement('option');
+          promptOption.textContent = 'Select City';
+          promptOption.value = '';
+          citySelect.appendChild(promptOption);
+
+          // Add new city options
+          data.forEach(city => {
+            const option = document.createElement('option');
+            option.textContent = city.name;
+            option.value = city.id;
+            citySelect.appendChild(option);
+          });
+        });
+    });
+  });
+</script>

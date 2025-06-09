@@ -1,0 +1,76 @@
+<!-- app/views/users/index.html.erb -->
+<h1>User一覧ページ</h1>
+
+<% if user_signed_in? %>
+    <h2><%= current_user.email %>でログインしています</h2> 
+
+
+    <div class="flex">
+        <% @users.each do |u| %>
+            <% if u == current_user %>
+                <div class="user-in">
+                    <p><%= u.name %>さん（あなた）</p>
+                    <p><%= link_to 'マイページへ', user_path(u.id) %></p>
+                </div>
+            <% end %>
+        <% end %>
+    </div>
+
+
+    <div class="ohter-flex">
+        <% number = 1 %>
+        <% @users.each do |u| %>
+            <% unless u == current_user %>
+                <div class="other-user-in">
+                    <p>プロフィール No.<%= number %></p>
+                    <p><%= u.name %>さん</p>
+                    <p><%= link_to 'ユーザーページへ', user_path(u.id) %></p>
+                </div>
+                <% number += 1 %>
+            <% end %>
+        <% end %>
+    </div>
+
+<% else %>
+  <%= link_to "SignUp", new_user_registration_path %>
+  <br>
+  <%= link_to "SignIn", new_user_session_path %>
+<% end %>
+
+<%= link_to "SignOut", destroy_user_session_path, :method => :delete, class:"signOutButton" %>
+<style>
+.signOutButton{
+    text-decoration:none;
+    display:inline-block;
+    border:3px solid royalblue;
+    background-color:aliceblue;
+    padding:5px;
+}
+.flex{
+    display:flex;
+    flex-wrap:wrap;
+    padding:10px;    
+}
+.ohter-flex{
+    display:flex;
+    flex-wrap:wrap;
+    padding:10px;
+}
+
+.user-in{
+    display:block;
+    width:300px;
+    text-align:center;
+    border:1px solid darkgray;
+    background-color:gainsboro;
+    flex-shrink: 0;
+}
+.other-user-in{
+    display:block;
+    width:300px;
+    text-align:center;
+    border:1px solid darkgray;
+    background-color:greenyellow;
+    flex-shrink: 0;
+}
+</style>

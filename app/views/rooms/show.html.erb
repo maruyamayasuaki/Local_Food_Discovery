@@ -1,0 +1,55 @@
+<h1>DM</h1>
+<div class="user-in">
+<% @entries.each do |e| %>
+    <% if e.user.id != current_user.id %>
+        <strong><a href="/users/<%= e.user.id %>"><%= e.user.name%></a></strong>さんとのDM
+    <% end %>
+<% end %>
+</div>
+
+<div class="dmMain">
+    <div class = "dmtalk">
+    <% @messages.each do |m| %>
+        <strong><%= m.body %></strong>
+        <small><%= m.user.name %>さん</small><hr>
+    <% end %>
+    </div>
+
+    <%= form_for @message do |f| %>
+    <%= f.text_field :body, :placeholder => "メッセージを入力して下さい" , :size => 100 %>
+    <%= f.hidden_field :room_id, :value => @room.id %>
+    <br>
+    <%= f.button type: 'submit' do %>
+        送信する <i class="fa-solid fa-paper-plane"></i>
+    <% end %>
+    <% end %>
+
+</div>
+
+
+<%= link_to "ユーザー一覧に戻る", users_path %>
+
+
+<style>
+.user-in{
+    text-align:center;
+    border:1px solid darkgray;
+    background-color:gainsboro;
+    height:60px;
+    width:100%;
+    font-size:30px;
+}
+
+.dmMain{
+    padding:30px;
+    border:1px solid darkgray;
+    background-color:gainsboro;
+}
+.dmtalk{
+    height:300px;
+    overflow-y:scroll;
+    border:1px solid darkgray;
+    background-color:white;
+}
+</style>
+<%# <p>Find me in app/views/rooms/show.html.erb</p> %>

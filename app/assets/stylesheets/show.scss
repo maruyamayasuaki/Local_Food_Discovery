@@ -1,0 +1,44 @@
+
+/* ボタンのスタイル */
+
+.delete-button {
+  padding: 10px 30px; /* ボタン内のテキスト周りのパディング */
+  width: 20px; /* ボタンの幅 */
+  height: 20px; /* ボタンの高さ */
+  font-size: 12px; /* フォントサイズ */
+  
+  background-color:black; /* ボタンの背景色 */
+  color: #ffffff; /* ボタンのテキスト色 */
+  border: none; /* ボーダーをなしにする */
+  border-radius: 5px; /* ボタンの角を丸くする */
+  cursor: pointer; /* ホバー時にポインタを表示 */
+  justify-content: center; /* 水平方向に中央揃え */
+  align-items: center; /* 垂直方向に中央揃え */
+  text-align: center; /* テキストの中央揃え */
+}
+
+.delete-button:hover {
+  background-color: #c6c2c2; /* ホバー時の背景色 */
+}
+
+
+.star-rating {
+    position: relative;
+    display: inline-block;
+    width: 5em;
+    height: 1em;
+    font-size: 25px;
+  }
+  .star-rating-front {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    color: #ffcc33;
+  }
+  .star-rating-back {
+    display: inline-block;
+    color: #ccc;
+  
+  }

@@ -1,0 +1,16 @@
+<% if user_signed_in? %>
+    <% if current_user.already_liked?(localfood) %>
+    <%= button_to localfood_like_path(id: localfood.id, localfood_id: localfood.id), method: :delete, remote: true, data: {"turbolinks" => false},class: "like-button" do %>
+    <i class="fas fa-heart fa-2x" aria-hidden="true" style="color: red;"></i>
+    <%= localfood.likes.count %>
+    <% end %>
+    <% else %>
+    <%= button_to localfood_likes_path(id: localfood.id, localfood_id: localfood.id), method: :post, remote: true, data: {"turbolinks" => false},class: "like-button" do %>
+        <i class="fas fa-heart fa-2x" aria-hidden="true"></i>
+    <%= localfood.likes.count %>
+    <% end %>
+<% end %>
+<% else %>
+    <p>いいねの数 = <%= localfood.likes.count %></p>
+<% end %>
+

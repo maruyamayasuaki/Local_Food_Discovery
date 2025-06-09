@@ -1,0 +1,114 @@
+<% if @user == current_user %>
+    <h1>マイページ</h1>
+<% end %>
+
+<% unless @user == current_user %>
+    <h1><%= @user.name %>さんのユーザーページ</h1>
+<% end %>
+<% if @prefecture %>
+  <p><strong>出身都道府県:</strong> <%= @prefecture.name %></p>
+<% end %>
+<% if @city %>
+  <p><strong>出身市町村:</strong> <%= @city.name %></p>
+<% end %>
+<p>メールアドレス : <%= @user.email %></p>
+
+<% if current_user.id == @user.id %>
+  <%= link_to "編集する", edit_user_registration_path %>
+<% end %>
+
+<% unless @user == current_user %>
+<div class="user-in">
+    <h2><%= @user.name %></h2>
+<% end %>
+<p><%= link_to "ユーザー一覧に戻る", users_path %></p>
+
+
+<%= render 'relationships/follow_button', user: @user %>
+
+
+<% if @user.id == current_user.id %>
+    <%= @msg %>
+<% else %>
+    <% if @isRoom == true %>
+        <p>DM<%= link_to content_tag(:i, "", class: "fa-solid fa-envelope"), room_path(@roomId) %></p>
+    <% else %>
+        <%= form_for @room do |f| %>
+            <%= fields_for @entry do |e|%>
+                <% e.hidden_field :user_id, value: @user.id %>
+            <% end %>
+        <%= f.submit "DMを開始する"%>
+        <% end %>
+    <% end %>
+<% end %>
+</div>
+
+
+
+
+
+<style>
+    .user-in{
+        width:100px;
+    padding:10px;
+    margin:10px;
+    text-align:center;
+    border:1px solid darkgray;
+    background-color:gainsboro;
+}
+</style>
+
+
+<h2>ユーザーの投稿一覧</h2>
+<% @user.localfoods.each do |t| %>
+  <div class="localfood-item">
+    店名：<%= t.shop %>
+    場所：<%= t.place %>
+    <% if t.image.attached? %>
+        <%= image_tag t.image, size: "220x180" %><br>
+    <%else%>
+        <img src="http://placehold.jp/220x180"><br>
+      <% end %>
+    価格：<%= t.price %>
+    投稿時間：<%= t.created_at %>
+    </div>
+<% end %>
+
+<!-- 以下はいいね機能を実装している場合-->
+<h2>ユーザーがいいねした投稿一覧</h2>
+<% @user.liked_tweets.each do |t| %>
+  <div class="localfood-item">
+    店名：<%= t.shop %>
+    場所：<%= t.place %>
+    <% if t.image.attached? %>
+        <%= image_tag t.image, size: "220x180" %><br>
+    <%else%>
+        <img src="http://placehold.jp/220x180"><br>
+      <% end %>
+    価格：<%= t.price %>
+    投稿時間：<%= t.created_at %>
+    </div>
+<% end %>
+<!-- ここまで-->
+
+<p><%= link_to "ユーザー一覧に戻る", users_path %></p>
+<%= link_to "投稿一覧に戻る", localfoods_path %>
+<p><%= link_to "ログアウト", destroy_user_session_path, :method => :delete, class:"signOutButton" %></p>
+
+
+<style>
+    .localfood-item{
+    display: flex;
+    background-color: #fff;
+    flex: 1 1 calc(25% - 12px); /* 4アイテムを横に並べる。ギャップを考慮 */
+    width:25%;
+    height: 450px;
+    box-sizing: border-box; /* パディングやボーダーを含めて計算 */
+    border: 1px solid #ccc; /* 任意のスタイル：ボーダーを追加 */
+    padding: 16px; /* 任意のスタイル：パディングを追加 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 任意のスタイル：シャドウを追加 */
+    display: flex;
+    flex-direction: column; /* 上下方向に並べる */
+}
+
+</style>

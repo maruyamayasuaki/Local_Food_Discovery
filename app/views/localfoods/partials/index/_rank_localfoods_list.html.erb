@@ -1,0 +1,8 @@
+<div class="localfoods-container">
+<% @rank_localfoods.each do |rank_localfood| %>
+  <div class="localfood-item">
+  <%= render partial: 'localfoods/partials/index/rank_localfood_item', locals: { rank_localfood: rank_localfood } %>
+  </div>
+<% end %>
+</div>
+<%= paginate @rank_localfoods %>

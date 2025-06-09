@@ -1,0 +1,37 @@
+  <%= link_to localfood_path(rank_localfood.id) do %>
+
+    <div class="up-container">
+      <% if rank_localfood.image.attached? %>
+        <%= image_tag rank_localfood.image, size: "220x180" %><br>
+      <%else%>
+      <img src="http://placehold.jp/220x180"><br>
+      <%end%>
+    </div>
+    <div class="down-container">
+      <%= rank_localfood.place %>
+      <strong><%= rank_localfood.shop %></strong>
+    <% if user_signed_in? %>
+      <% if current_user.already_liked?(rank_localfood) %>
+        <%= button_to localfood_like_path(id: rank_localfood.id, localfood_id: rank_localfood.id), method: :delete do %>
+          <i class="fas fa-heart fa-2x" aria-hidden="true" style="color: red;"></i>
+          <%= rank_localfood.likes.count %>
+        <% end %>
+      <% else %>
+        <%= button_to localfood_likes_path(id: rank_localfood.id, localfood_id: rank_localfood.id), method: :post do %>
+          <i class="fas fa-heart fa-2x" aria-hidden="true"></i>
+          <%= rank_localfood.likes.count %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <p>いいねの数 = <%= rank_localfood.likes.count %></p>
+    <% end %>
+      <h3>総合評価：
+        <span class="star-rating">
+          <span class="star-rating-front" style="width: <%= getPercent(rank_localfood.overall) %>%;">★★★★★</span>
+          <span class="star-rating-back">★★★★★</span>
+        </span> 
+      </h3>
+  <p><%= link_to rank_localfood.user.name, user_path(rank_localfood.user.id) %>さん</p>
+    </div>
+  <% end %>
+

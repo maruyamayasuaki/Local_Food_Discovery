@@ -1,0 +1,303 @@
+<%= stylesheet_link_tag 'index', media: "all" %>
+
+<div class="map-container" style="position: relative;">
+  
+  <div class='search-form' style="position: absolute; top: 20px; left: 25%; transform: translateX(-25%);">
+    <%= form_tag({controller: "localfoods", action: "index"}, method: :get) do %>
+      <%= content_tag(:i, nil, class: "fa-solid fa-magnifying-glass") %>
+      <%= text_field_tag :search ,nil,style: "width: 250px;"%>
+      <%= submit_tag '旅行先を検索' %>
+    <% end %>
+  </div>
+
+<div class="japan_map">
+    <%= image_tag 'japan_map.png', alt: '日本地図',size: '900x700' %>
+    <button class="area_btn area1" data-area="hokkaido">北海道</button>
+    <button class="area_btn area2" data-area="tohoku">東北</button>
+    <button class="area_btn area3" data-area="kanto">関東</button>
+    <button class="area_btn area4" data-area="hokuriku">北陸</button>
+    <button class="area_btn area5" data-area="tokai">東海</button>
+    <button class="area_btn area6" data-area="kinki">近畿</button>
+    <button class="area_btn area7" data-area="chugoku">中国</button>
+    <button class="area_btn area8" data-area="shikoku">四国</button>
+    <button class="area_btn area9" data-area="kyushu">九州・沖縄</button>
+
+    <div class="area_overlay"></div>
+
+    <!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.prefecture-button');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const searchText = button.textContent;
+
+                    fetch(`/localfoods/search?query=${encodeURIComponent(searchText)}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Search Results:', data);
+                        // 必要に応じて検索結果を表示するための処理を追加
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="pref_area">
+    <div class="pref_list" data-list="hokkaido" style="display: none;">
+        <button class="prefecture-button" data-id="1">北海道</button>
+        <div></div>
+    </div>
+    <div class="pref_list" data-list="tohoku" style="display: none;">
+        <button class="prefecture-button" data-id="2">青森県</button>
+        <button class="prefecture-button" data-id="3">岩手県</button>
+        <button class="prefecture-button" data-id="4">宮城県</button>
+        <button class="prefecture-button" data-id="5">秋田県</button>
+        <button class="prefecture-button" data-id="6">山形県</button>
+        <button class="prefecture-button" data-id="7">福島県</button>
+        <div></div>
+    </div>
+    <div class="pref_list" data-list="kanto" style="display: none;">
+        <button class="prefecture-button" data-id="8">茨城県</button>
+        <button class="prefecture-button" data-id="9">栃木県</button>
+        <button class="prefecture-button" data-id="10">群馬県</button>
+        <button class="prefecture-button" data-id="11">埼玉県</button>
+        <button class="prefecture-button" data-id="12">千葉県</button>
+        <button class="prefecture-button" data-id="13">東京都</button>
+        <button class="prefecture-button" data-id="14">神奈川県</button>
+        <div></div>
+    </div>
+    <div class="pref_list" data-list="hokuriku" style="display: none;">
+        <button class="prefecture-button" data-id="15">新潟県</button>
+        <button class="prefecture-button" data-id="16">富山県</button>
+        <button class="prefecture-button" data-id="17">石川県</button>
+        <button class="prefecture-button" data-id="18">福井県</button>
+        <div></div>
+    </div>
+    <div class="pref_list" data-list="tokai" style="display: none;">
+        <button class="prefecture-button" data-id="19">山梨県</button>
+        <button class="prefecture-button" data-id="20">長野県</button>
+        <button class="prefecture-button" data-id="21">岐阜県</button>
+        <button class="prefecture-button" data-id="22">静岡県</button>
+        <button class="prefecture-button" data-id="23">愛知県</button>
+        <div></div>
+    </div>
+    <div class="pref_list" data-list="kinki" style="display: none;">
+        <button class="prefecture-button" data-id="24">三重県</button>
+        <button class="prefecture-button" data-id="25">滋賀県</button>
+        <button class="prefecture-button" data-id="26">京都府</button>
+        <button class="prefecture-button" data-id="27">大阪府</button>
+        <button class="prefecture-button" data-id="28">兵庫県</button>
+        <button class="prefecture-button" data-id="29">奈良県</button>
+        <button class="prefecture-button" data-id="30">和歌山県</button>
+        <div></div>
+    </div>
+    <div class="pref_list" data-list="chugoku" style="display: none;">
+        <button class="prefecture-button" data-id="31">鳥取県</button>
+        <button class="prefecture-button" data-id="32">島根県</button>
+        <button class="prefecture-button" data-id="33">岡山県</button>
+        <button class="prefecture-button" data-id="34">広島県</button>
+        <button class="prefecture-button" data-id="35">山口県</button>
+        <div></div>
+    </div>
+    <div class="pref_list" data-list="shikoku" style="display: none;">
+        <button class="prefecture-button" data-id="36">徳島県</button>
+        <button class="prefecture-button" data-id="37">香川県</button>
+        <button class="prefecture-button" data-id="38">愛媛県</button>
+        <button class="prefecture-button" data-id="39">高知県</button>
+        <div></div>
+    </div>
+    <div class="pref_list" data-list="kyushu" style="display: none;">
+        <button class="prefecture-button" data-id="40">福岡県</button>
+        <button class="prefecture-button" data-id="41">佐賀県</button>
+        <button class="prefecture-button" data-id="42">長崎県</button>
+        <button class="prefecture-button" data-id="43">熊本県</button>
+        <button class="prefecture-button" data-id="44">大分県</button>
+        <button class="prefecture-button" data-id="45">宮崎県</button>
+        <button class="prefecture-button" data-id="46">鹿児島県</button>
+        <button class="prefecture-button" data-id="47">沖縄県</button>
+    </div>
+</div>
+<div id="search-results"></div> <!-- 検索結果表示用の要素 -->
+
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.prefecture-button');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const searchText = button.textContent;
+
+                    // URLを正しく構築
+                    const url = `http://localhost:3000/localfoods/search?query=${encodeURIComponent(searchText)}`;
+                    console.log("Request URL:", url); // デバッグ用にURLをコンソールに出力
+
+                    fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        displayResults(data); // 検索結果表示用の関数を呼び出し
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+
+            function displayResults(results) {
+                const resultsContainer = document.getElementById('search-results');
+                resultsContainer.innerHTML = ''; // 以前の検索結果をクリア
+
+                if (results.length === 0) {
+                    resultsContainer.innerHTML = '<p>該当するローカルフードが見つかりませんでした。</p>';
+                    return;
+                }
+
+                const ul = document.createElement('ul');
+                results.forEach(result => {
+                    const li = document.createElement('li');
+                    li.textContent = `${result.name} (${result.place})`;
+                    ul.appendChild(li);
+                });
+
+                resultsContainer.appendChild(ul);
+            }
+        });
+    </script>
+
+</html>
+</div>
+</div>
+
+
+
+<div class="tweets-container">
+
+  <h3 class="cool-header">投稿一覧</h3>
+
+  <%= render partial: 'localfoods/partials/index/tab_content', localfoods: @localfoods, rank_localfoods: @rank_localfoods %><!--投稿一覧-->
+</div>
+
+</body>
+
+<div id='map'></div>
+
+<!-- js部分 -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const userTime = new Date();
+  const offset = userTime.getTimezoneOffset();
+  document.getElementById('user_time').value = userTime;
+  document.getElementById('timezone_offset').value = offset;
+});
+
+    function initMap(){
+
+      //初期表示位置
+      let latlng = new google.maps.LatLng(38.60, 139.5);
+      //デザイン
+      let styles = [
+           {
+            stylers: [
+             { "saturation": 0 },
+             { "lightness": 0 }
+            ]
+           }
+          ];
+
+      let map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 5.5,
+          styles: styles,
+          center: latlng
+      });
+      let transitLayer = new google.maps.TransitLayer();
+      transitLayer.setMap(map);
+
+//複数マーカー ここから
+      <% @localfoods.each do |post|%>
+        ( function() { 
+          let markerLatLng = { lat: <%= post.lat %>, lng: <%= post.lng %> }; // 緯度経度のデータ作成
+          let marker = new google.maps.Marker({ 
+            position: markerLatLng, 
+            map: map 
+          });
+//マーカーをクリックしたとき、詳細情報を表示
+          let infowindow = new google.maps.InfoWindow({
+            position: markerLatLng,
+            content: "<a href='<%= localfood_url(post.user.id) %>' target='_blank'><%= post.place %></a>"
+          }); //ここで詳細ページへのリンクを表示させる
+          marker.addListener('click', function() {
+            infowindow.open(map, marker);
+          });
+
+       })();
+      <% end %>
+      //複数マーカー ここまで 
+      
+      
+  }
+</script>
+
+<!-- Google Maps APIの読み込み -->
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAP_API_KEY'] %>&callback=initMap" async defer></script>
+
+
+
+
+<script>
+$(function(){
+    //地域を選択
+    $('.area_btn').click(function(){
+        $('.area_overlay').show();
+        $('.pref_area').show();
+        var area = $(this).data('area');
+        $('[data-list]').hide();
+        $('[data-list="' + area + '"]').show();
+    });
+    
+    //レイヤーをタップ
+    $('.area_overlay').click(function(){
+      prefReset();
+    });
+    
+    //都道府県をクリック
+    $('.pref_list [data-id]').click(function(){
+        if($(this).data('id')){
+            var id = $(this).data('id');
+            //このidを使用して行いたい操作をしてください
+            //都道府県IDに応じて別ページに飛ばしたい場合はこんな風に書く↓
+            //window.location.href = 'https://kinocolog.com/pref/' + id;
+            
+            prefReset();
+        }
+    });
+    
+    //表示リセット
+    function prefReset(){
+        $('[data-list]').hide();
+        $('.pref_area').hide();
+        $('.area_overlay').hide();
+    }
+});
+</script>

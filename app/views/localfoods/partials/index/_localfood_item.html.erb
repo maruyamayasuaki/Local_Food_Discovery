@@ -1,0 +1,80 @@
+    <div class="up-container">
+      <%= link_to localfood_path(localfood.id) do %>
+      <% if localfood.image.attached? %>
+        <%= image_tag localfood.image, size: "220x180" %><br>
+      <%else%>
+        <img src="http://placehold.jp/220x180"><br>
+      <% end %>
+      <%end%>
+    </div>
+    <div class="middle-container">
+      <p><%= localfood.place %></p>
+      <%= link_to localfood_path(localfood.id) do %>
+      <p><strong><%= localfood.shop %></strong></p>
+      <% end %>
+      <h3>総合評価：
+        <span class="star-rating">
+          <span class="star-rating-front" style="width: <%= getPercent(localfood.overall) %>%;">★★★★★</span>
+          <span class="star-rating-back">★★★★★</span>
+        </span> 
+      </h3>
+      
+      <!-- 朝昼夜の選択 -->
+        <% if localfood.meal_times.is_a?(Array) %>
+        <p>食事の時間帯:<%= localfood.meal_times.join(", ") %></p>
+        <% else %>
+        <%= localfood.meal_times %>
+        <% end %>
+
+      <!-- 価格帯の表示 -->
+      <p>価格帯: <%= localfood.price_range %></p>
+      <!-- 営業時間の表示 -->
+      <p>
+      <% if localfood.opening_hours.present? %>
+      <% current_time = Time.current %>
+      <% day_of_week = current_time.wday %>
+      <% opening_hours = localfood.opening_hours.split(", ")[day_of_week] %>
+      <%= opening_hours %>
+      <% opening_time, closing_time = opening_hours.scan(/(\d{1,2}:\d{2}\s(?:PM|AM))/).map { |t| Time.parse(t.first) } %>
+      <%# <% opening_time, closing_time = opening_hours.scan(/\d{1,2}:\d{2}\s(?:AM|PM)/).map { |t| Time.parse(t) } %>
+      <%end%>
+
+  </p>
+    </div>
+    <div class="down-container">
+    <div class="user-info">
+      <p><%= link_to localfood.user.name, user_path(localfood.user.id) %>さん</p>
+    </div>
+    <!--<td id="like_buttons_<%= localfood.user.id %>" >
+    <%= render "likes/like", localfood: localfood %> -->
+    <% if user_signed_in? %>
+      <% if current_user.already_liked?(localfood) %>
+      <%= button_to localfood_like_path(id: localfood.id, localfood_id: localfood.id), method: :delete, remote: true ,class: "like-button" do %>
+        <i class="fas fa-heart fa-2x" aria-hidden="true" style="color: red;"></i>
+      <%= localfood.likes.count %>
+      <% end %>
+      <% else %>
+      <%= button_to localfood_likes_path(id: localfood.id, localfood_id: localfood.id), method: :post, remote: true ,class: "like-button" do %>
+          <i class="fas fa-heart fa-2x" aria-hidden="true"></i>
+      <%= localfood.likes.count %>
+      <% end %>
+    <% end %>
+    <% else %>
+      <p>いいねの数 = <%= localfood.likes.count %></p>
+    <% end %>
+    <% if current_user.city.name == localfood.city_name %>
+      <% if current_user.already_recommendationed?(localfood) %>
+        <%= button_to localfood_recommendation_path(id: localfood.id, localfood_id: localfood.id), method: :delete, remote: true, class: "recommendation-button" do %>
+          <i class="fas fa-thumbs-up fa-2x" aria-hidden="true" style="color: blue;"></i>
+          <%= localfood.recommendations.count %>
+        <% end %>
+      <% else %>
+        <%= button_to localfood_recommendations_path(id: localfood.id, localfood_id: localfood.id), method: :post, remote: true, class: "recommendation-button" do %>
+          <i class="fas fa-thumbs-up fa-2x" aria-hidden="true"></i>
+          <%= localfood.recommendations.count %>
+        <% end %>
+      <% end %>
+    <% else %>
+    <% end %>
+    </div>
+

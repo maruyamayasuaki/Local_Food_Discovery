@@ -1,0 +1,341 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+
+.tweets-container {
+  animation: bgchange 20s ease infinite;/*変化の時間を変更したい場合は20sの部分を好きな時間に変更*/
+  width: 100%;
+  margin: 10px auto;
+}
+@keyframes bgchange{
+  0%   {background:#f1f909;}/*変化させたい色*/
+  50%  {background:#f448bb;}/*変化させたい色*/
+  75%  {background:#f72d05;}/*変化させたい色*/
+  100%  {background:#e77612;}/*変化させたい色*/
+}
+h3.cool-header {
+  font-family: "Dela Gothic One", sans-serif;
+  font-size: 70px; /* 必要に応じて調整 */
+  font-weight: 500; /* フォントの太さ */
+  text-align: center; /* テキストの中央揃え */
+  margin: 20px 0; /* 上下の余白 */
+  color: #333; /* テキストの色 */
+  text-transform: uppercase; /* テキストを大文字に変換 */
+  letter-spacing: 2px; /* 文字間のスペース */
+}
+
+.localfoods-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px; /* アイテム間のスペースを調整 */
+}
+
+.localfood-item {
+  background-color: #fff;
+  flex: 1 1 calc(25% - 12px); /* 4アイテムを横に並べる。ギャップを考慮 */
+  width:25%;
+  height: 450px;
+  box-sizing: border-box; /* パディングやボーダーを含めて計算 */
+  border: 1px solid #ccc; /* 任意のスタイル：ボーダーを追加 */
+  padding: 16px; /* 任意のスタイル：パディングを追加 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 任意のスタイル：シャドウを追加 */
+  display: flex;
+  flex-direction: column; /* 上下方向に並べる */
+}
+  
+  .up-container {
+    border-top: solid #00acee;
+    padding: 5px; /* 任意のスタイル：パディングを追加 */
+    flex: 1; /* 上部コンテナーが残りの空間を占める */
+    display: flex;
+    justify-content: center; /* 横方向の中央配置 */
+    align-items: center; /* 縦方向の中央配置 */
+  }
+  
+  .middle-container {
+    /* middlecontainer のスタイル */
+    flex: 1; /* 中部コンテナが残りの空間を占める */
+    border-bottom: solid #00acee;
+  }
+
+  .down-container {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .user-info {
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .like-button {
+    align-items: center;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: inline-flex;
+
+  }
+  .like-button i {
+    color: inherit; /* アイコンの色は親要素から継承 */
+  }
+  
+  
+
+/*タブ切り替え全体のスタイル*/
+.tabs {
+  margin-top: 50px;
+  padding-bottom: 40px;
+  background-color:none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  margin: 0 auto;}
+
+/*タブのスタイル*/
+.tab_item {
+  width: calc(100%/2);
+  height: 50px;
+  border-bottom: 3px solid #5ab4bd;
+  background-color: #d9d9d9;
+  line-height: 50px;
+  font-size: 16px;
+  text-align: center;
+  color: #565656;
+  display: block;
+  float: left;
+  text-align: center;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+.tab_item:hover {
+  opacity: 0.75;
+}
+
+/*ラジオボタンを全て消す*/
+input[name="tab_item"] {
+  display: none;
+}
+
+/*タブ切り替えの中身のスタイル*/
+.tab_content {
+  display: none;
+  padding: 40px 40px 0;
+  clear: both;
+  overflow: hidden;
+}
+
+
+/*選択されているタブのコンテンツのみを表示*/
+#time:checked ~ #time_content,
+#likes:checked ~ #likesrank_content{
+  display: block;
+}
+
+/*選択されているタブのスタイルを変える*/
+.tabs input:checked + .tab_item {
+  background-color: #5ab4bd;
+  color: #fff;
+}
+
+
+@media (max-width: 1200px) {
+  .localfood-item {
+    flex: 1 1 calc(33.33% - 16px); /* 3アイテムを横に並べる */
+  }
+}
+
+@media (max-width: 900px) {
+  .localfood-item {
+    flex: 1 1 calc(50% - 16px); /* 2アイテムを横に並べる */
+  }
+}
+
+@media (max-width: 600px) {
+  .localfood-item {
+    flex: 1 1 100%; /* 1アイテムを横に並べる */
+  }
+}
+
+
+#map {
+  height: 500px;
+  width: 80%;
+}
+
+
+/*　以下一覧ページの星用のCSS　*/
+
+.star-rating {
+  position: relative;
+  display: inline-block;
+  width: 5em;
+  height: 1em;
+  font-size: 25px;
+}
+.star-rating-front {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  color: #ffcc33;
+}
+.star-rating-back {
+  display: inline-block;
+  color: #ccc;
+
+}
+
+
+.map-container {
+  position: relative;  /* 相対位置 */
+  background-color: none;  /* ここに任意の色を設定 */
+  border-color: #111;
+  border-style: solid;
+}
+
+.search-form {
+  // display: flex;
+  // justify-content: center;
+  // flex-direction: column;
+  // align-items: center;
+  position: absolute;
+  top: 20px;
+  left: 30%;
+  transform: translateX(-30%);
+  z-index: 10; /* z-indexを追加して前面に表示 */ 
+}
+.search-input {
+  width: 100%;
+  border-radius: 5px;
+}
+/* 日本地図DOM */
+.japan_map{
+  position: relative;
+  box-sizing: border-box;
+  margin: 0 auto;
+  display: table;
+  background-color:none;
+}
+
+/* 日本地図ボタン */
+.japan_map .area_btn{
+  position: absolute;
+  z-index: 1;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: 3px solid #333333;
+  border-radius: 5px;
+  background-color: #FFF;
+  padding: 0.2em auto;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #333;
+  text-shadow: 0 1px 0 #FFF;
+  box-shadow: 0 1px 0 #FFF, 0 -1px 0 #FFF, 1px 0 0 #FFF, -1px 0 0 #FFF, 1px 1px 0 #FFF, -1px -1px 0 #FFF, 1px -1px 0 #FFF, -1px 1px 0 #FFF;
+  transition: all 0.2s ease;
+  font-size: 1em;
+}
+
+/* ボタン配置（使用する日本地図画像により微調整） */
+.japan_map .area_btn.area1{
+  top: 18%;
+  right: 18%;
+  width: 10%;
+}
+.japan_map .area_btn.area2{
+  top: 40%;
+  right: 30%;
+  width: 10%;
+}
+.japan_map .area_btn.area3{
+  top: 64%;
+  right: 32%;
+  width: 10%;
+}
+.japan_map .area_btn.area4{
+  top: 55%;
+  right: 45%;
+  width: 10%;
+}
+.japan_map .area_btn.area5{
+  top: 62%;
+  right: 45%;
+  width: 10%;
+}
+.japan_map .area_btn.area6{
+  top: 70%;
+  right: 50%;
+  width: 10%;
+}
+.japan_map .area_btn.area7{
+  top: 63%;
+  right: 65%;
+  width: 10%;
+}
+.japan_map .area_btn.area8{
+  top: 73%;
+  right: 62%;
+  width: 10%;
+}
+.japan_map .area_btn.area9{
+  top: 80%;
+  left: 0;
+  width: 25%;
+}
+
+/* オーバーレイ */
+.japan_map .area_overlay{
+  display: none;
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  background-color: #111;
+  opacity: 0.5;
+  background-color: rgba(17, 17, 17, 0.5);
+  cursor: pointer;
+}
+
+/* 選択前は表示を隠す */
+.japan_map .pref_area{
+  display: none;
+}
+
+/* 地域毎の都道府県リスト */
+.japan_map .pref_list{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  z-index: 3;
+  box-sizing: border-box;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  width: 90%;
+  background-color: #FFF;
+}
+.japan_map .pref_list > div{
+  box-sizing: border-box;
+  width: 50%;
+  border: 1px solid #CCC;
+  font-weight: bold;
+  text-align: center;
+  padding: 0.5em;
+  cursor: pointer;
+}
+
+/* 選択中の都道府県 */
+.japan_map .pref_list > div.active{
+  background-color: #333;
+  color: #FFF;
+}
