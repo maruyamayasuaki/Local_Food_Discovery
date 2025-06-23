@@ -11,7 +11,7 @@ Local Food Discovery は、旅行先の飲食店を共有しあう Ruby on Rails
 - **いいね・おすすめ**: 投稿に対していいねや、おすすめ（同じ市区町村のユーザー向け）を付けられます。いいね数によるランキングも表示します。
   ![image (29)](https://github.com/user-attachments/assets/5285ef1c-37e9-47a2-8cb6-a7883172cd45)
 - **ログイン機能**: ユーザー名とメールアドレス，および県名と市町村を選択式を登録します．県名の表示によって，地元民かどうかが分かります．
-  <img src="https://github.com/user-attachments/assets/1e1b3277-bbe6-433a-a5e0-cf48d43b61ef" style="width: 80%;" />
+  <img src="https://github.com/user-attachments/assets/1e1b3277-bbe6-433a-a5e0-cf48d43b61ef" style="width: 90%;" />
 
    
 
