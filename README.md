@@ -1,6 +1,6 @@
 # Local Food Discovery
 
-Local Food Discovery は、旅行先の飲食店を共有しあう Ruby on Rails 製のアプリケーションです。
+Local Food Discovery は、旅行先の飲食店を共有しあう Ruby on Rails 製のアプリケーションです!
 
 ユーザーは店舗の情報を投稿し、他のユーザーと交流できます。地元民がおすすめしているかどうかわかるので、旅行先での店選びに非常に有用です。
 
